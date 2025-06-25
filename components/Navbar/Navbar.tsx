@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { SignInButton } from '@clerk/nextjs';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,16 +36,12 @@ const Navbar = () => {
             Enter code
           </button>
         </Link>
-        <Link href="/pages/Auth">
-          <button className="bg-purple-100 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-200 transition">
-            Log in
-          </button>
-        </Link>
-        <Link href="/pages/Auth">
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition">
-            Sign up
-          </button>
-        </Link>
+        <Link href={"/pages/Auth"}>
+          <div className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition">
+             Auth
+          </div>
+          </Link>
+    
       </div>
 
       {/* Mobile Hamburger */}
@@ -73,20 +70,17 @@ const Navbar = () => {
           </ul>
           <div className="mt-4 flex flex-col gap-3">
             <Link href="/pages/enquiry">
-              <button className="border border-purple-200 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-50 transition">
+              <div className="border border-purple-200 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-50 transition text-center">
+                <button>
                 Get a quote
-              </button>
+                </button>
+              </div>
             </Link>
-            <Link href="/pages/Auth">
-              <button className="bg-purple-100 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-200 transition">
-                Log in
-              </button>
-            </Link>
-            <Link href="/pages/Auth">
-              <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition">
-                Sign up
-              </button>
-            </Link>
+            <Link href={"/pages/Auth"}>
+              <div className="bg-purple-100 text-purple-700 px-4 py-2 rounded-md hover:bg-purple-200 transition text-center">
+                  Auth
+              </div>
+              </Link>
           </div>
         </div>
       )}

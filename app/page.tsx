@@ -7,37 +7,41 @@ import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar/Navbar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
   const { theme } = useTheme();
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
+
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect if device is mobile
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
-    handleResize(); // Run on mount
-    window.addEventListener("resize", handleResize); // Update on resize
-
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // GSAP animations
+  // ✅ Redirect logged-in users
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push("/pages/dashboard");
+    }
+  }, [isLoaded, isSignedIn]);
+
   useGSAP(() => {
     if (!mounted) return;
 
     gsap.fromTo(
       ".bg-float",
       { opacity: 0, scale: 1.05 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 2,
-        ease: "power1.inOut",
-      }
+      { opacity: 1, scale: 1, duration: 2, ease: "power1.inOut" }
     );
 
     gsap.to(".bg-float", {
@@ -80,9 +84,7 @@ const Page: React.FC = () => {
     <section>
       <div className="min-h-screen bg-white dark:bg-black transition-colors duration-500">
         <Navbar />
-
         <div className="relative flex items-center justify-center min-h-screen overflow-hidden px-4 text-center">
-          {/* Background Image */}
           <img
             src={backgroundImage}
             alt="Floating background"
@@ -90,12 +92,10 @@ const Page: React.FC = () => {
             aria-hidden="true"
           />
 
-          {/* Theme Toggle */}
           <div className="absolute top-5 right-5 z-20">
             <ThemeToggle />
           </div>
 
-          {/* Glass Panel */}
           <div className="absolute z-10 backdrop-blur-xl bg-white/30 dark:bg-white/10 border border-white/20 dark:border-white/10 shadow-xl rounded-xl p-8 max-w-3xl mx-auto transition-all duration-500">
             <p className="text-lg text-gray-600 dark:text-gray-300">
               Introducing{" "}
@@ -117,15 +117,15 @@ const Page: React.FC = () => {
               needs of every student.
             </p>
 
-            {/* Buttons always shown */}
             <div className="hero-buttons flex flex-col md:flex-row gap-4 justify-center items-center">
-              <Button
-                variant="default"
-                className="px-6 py-4 text-lg bg-purple-600 text-white hover:bg-purple-700"
-                asChild
-              >
-                <a href="/pages/Auth">Login</a>
-              </Button>
+              <Link href="/pages/Auth">
+                <Button
+                  variant="default"
+                  className="px-6 py-4 text-lg bg-purple-600 text-white hover:bg-purple-700"
+                >
+                  Auth
+                </Button>
+              </Link>
               <Button
                 variant="secondary"
                 className="px-6 py-4 text-lg dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
